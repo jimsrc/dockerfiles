@@ -12,6 +12,10 @@ RUN wget http://www.fftw.org/fftw-3.3.5.tar.gz \
     && gunzip fftw-3.3.5.tar.gz \
     && tar -xvf fftw-3.3.5.tar \
     && cd fftw-3.3.5 \
+    && ./configure --enable-long-double \
+    && make \
+    && make install \
+    && make distclean \
     && ./configure --enable-single \
     && make \
     && make install \
