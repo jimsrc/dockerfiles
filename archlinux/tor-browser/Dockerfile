@@ -42,7 +42,15 @@ RUN gpg --recv-keys --keyserver hkp://pgp.mit.edu D1483FA6C3C07136 \
     && pacaur -S aur/tor-browser-en-us --noconfirm
 
 #--- update && upgrade the system
-# NOTE: pass the value of this ARG with the CLI argument --build-arg
+# NOTE: pass the value of this ARG with the CLI argument --build-arg. For
+# example:
+#       docker build -t <tag-for-docker-image> \
+#           --build-arg VERSION_DATE=`date +%d%b%Y` <Dockerfile-directory>
+# This "ARG" line is to force the build to bifurcate the container 
+# image at this point, and build a new layer with all the upgrades of 
+# the system (openssl, tor-browser, etc), by executing the 'pacman -Syu'. 
+# The kernel version of course should be updated in the host.
+
 ARG VERSION_DATE
 RUN pacaur -Syu --noconfirm
 
