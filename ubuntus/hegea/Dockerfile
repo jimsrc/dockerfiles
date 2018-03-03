@@ -42,5 +42,12 @@ RUN echo "source $HOME/root_auger/root/bin/thisroot.sh" >> ~/.bashrc \
 COPY CDAS $HOME/CDAS
 COPY root_auger $HOME/root_auger
 
+# asegurarnos de q tiene el owner correcto
+USER root
+RUN chown -R masiasmj:masiasmj $HOME/CDAS \
+  && chown -R masiasmj:masiasmj $HOME/root_auger
+
+USER masiasmj
+
 
 #EOF
