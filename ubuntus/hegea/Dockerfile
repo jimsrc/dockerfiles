@@ -49,5 +49,15 @@ RUN chown -R masiasmj:masiasmj $HOME/CDAS \
 
 USER masiasmj
 
+#--- re-compiling
+# since, the original contents of the CDAS and root_auger directories
+# hace been compiled in the original machine 'hegea', they have binaries 
+# linked to specific versions of some libraries. So let's recompile in 
+# our present machine:
+RUN cd $CDAS/MoIO/v5r6/cmt \
+    && make clean \
+    && cmt config \
+    && make
+
 
 #EOF
