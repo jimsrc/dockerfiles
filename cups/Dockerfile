@@ -50,7 +50,7 @@ RUN mkdir ~/.cups \
 
 #CMD [ "service", "cups", "restart" ]
 #ENTRYPOINT [ "service", "cups", "restart", "&&", "ps", "aux" ]
-CMD service cups restart \
+CMD sudo service cups restart \
 	&& bash -c "while [[ 0 ]]; do sleep 60; done"
 
 #EOF
