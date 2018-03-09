@@ -1,0 +1,2 @@
+ubuntus/hegea/CDAS filter=lfs diff=lfs merge=lfs -text
+ubuntus/hegea/root_auger filter=lfs diff=lfs merge=lfs -text
