@@ -29,6 +29,9 @@ USER masiasmj
 ENV PATH="$HOME/root_auger/root/bin:$PATH"
 ENV PATH="$HOME/CDAS/CMT/v1r18p20041201/Linux-x86_64:$PATH"
 ENV CDAS="$HOME/CDAS"
+
+# append this to ~/.bashrc so that we can load some
+# environment variables of Root and CDAS
 RUN echo "source $HOME/root_auger/root/bin/thisroot.sh" >> ~/.bashrc \
     && echo "CDASVERSION=\$(basename \$CDAS/version_cdas-*.tgz .tgz | sed -e 's/version_cdas-//' | sed -e 's/p[0-9]//')" >> ~/.bashrc \
     && echo "export CMTVERSION=\$(basename \$CDAS/CMT/*)" >> ~/.bashrc \
@@ -53,10 +56,8 @@ USER masiasmj
 # hace been compiled in the original machine 'hegea', they have binaries 
 # linked to specific versions of some libraries. So let's recompile in 
 # our present machine:
-RUN cd $CDAS/MoIO/v5r6/cmt \
-    && make clean \
-    && cmt config \
-    && make
-
+COPY compile_MoIO.sh $HOME/.
+RUN $HOME/compile_MoIO.sh
+# MoIO is compiled! :D
 
 #EOF
