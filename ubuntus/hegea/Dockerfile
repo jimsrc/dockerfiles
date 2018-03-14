@@ -10,13 +10,17 @@ RUN apt-get install -y xorg make libnetcdf-dev
 # install g++, etc
 RUN apt-get install -y build-essential
 
+ARG UID_HOST
+ARG GID_HOST
 # crear user c/ sudo
 #+++++++++++++++++++++++++++++++++++++++++
 ENV HOME /home/masiasmj
-# Add docker user (user:pass is docker:docker):
+# add this group to be consistent with the $GID in host
+RUN groupadd dummy -g ${GID_HOST}
+# Add user (user:pass is masiasmj:masiasmj):
 # NOTE: the 'wheel' group has to be added by hand into the sudoers file
 RUN DOCKER_ENCRYPTED_PASSWORD=`perl -e 'print crypt(masiasmj, "masiasmj"),"\n"'` \
-    && useradd -m --uid 1000 -G sudo -d ${HOME} -p "$DOCKER_ENCRYPTED_PASSWORD" -s /bin/bash masiasmj \
+    && useradd -m --uid ${UID_HOST} -G sudo -d ${HOME} -g ${GID_HOST} -p "$DOCKER_ENCRYPTED_PASSWORD" -s /bin/bash masiasmj \
     && echo " %wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # de ahora en adelante, ejecutamos como user=docker
