@@ -38,11 +38,6 @@ RUN echo "source $HOME/root_auger/root/bin/thisroot.sh" >> ~/.bashrc \
     && echo "source \$CDAS/Work/\$CDASVERSION/cmt/cdas.sh" >> ~/.bashrc \
     && echo "export CMTPATH=\$CDAS/:\$CDAS/IoFd:\$CMTPATH:\$HOME" >> ~/.bashrc
 
-#ENV ROOTSYS="$HOME/root_auger/root"
-#ENV ROOTWCONFIG="Linux-x86_64"
-#ENV ROOTWROOT="$HOME/CDAS/RootW/v2r8"
-#ENV ROOTEXEC="/bin"
-
 COPY CDAS $HOME/CDAS
 COPY root_auger $HOME/root_auger
 
