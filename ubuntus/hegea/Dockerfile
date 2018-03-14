@@ -16,7 +16,7 @@ ARG GID_HOST
 #+++++++++++++++++++++++++++++++++++++++++
 ENV HOME /home/masiasmj
 # add this group to be consistent with the $GID in host
-RUN groupadd dummy -g ${GID_HOST}
+RUN groupadd masiasmj -g ${GID_HOST}
 # Add user (user:pass is masiasmj:masiasmj):
 # NOTE: the 'wheel' group has to be added by hand into the sudoers file
 RUN DOCKER_ENCRYPTED_PASSWORD=`perl -e 'print crypt(masiasmj, "masiasmj"),"\n"'` \

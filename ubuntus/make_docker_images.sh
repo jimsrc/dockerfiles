@@ -7,14 +7,18 @@
     exit 1;
 }
 while [[ $# -gt 0 ]]; do
-    local key="$1"
+    key="$1"
     case $key in
         -d)
         DockerfileDir="$2"
-        shift; shift
+        shift; shift;
+        ;;
+        -g)
+        GID=$2
+        shift; shift;
         ;;
         *)
-        echo -e "\n [-] ERROR, unknown argument: $2\n"
+        echo -e "\n [-] ERROR, unknown argument: $1\n"
         exit 1
     esac
 done
@@ -25,6 +29,12 @@ if [[ ! -f "${DockerDir}/Dockerfile" ]]; then
     echo -e "\n [!] ${DockerfileDir} must be the root path of the Git repository.\n"
     exit 1
 fi
+
+# report for troubleshooting
+echo -e "\n ---> Using args:"
+echo " gid: ${GID}"
+echo " uid: $UID"
+echo -e " proxy: ${http_proxy}\n"
 
 # install base image
 docker build \
