@@ -8,13 +8,10 @@ RUN apt-get install -y wget
 USER masiasmj
 WORKDIR $HOME
 
-COPY conda/conda_installer.sh $HOME/.
-
 # download installer && install Miniconda && remove installer
 RUN wget -c http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh \
-    && chmod +x ./conda_installer.sh \
 	&& chmod +x Miniconda-latest-Linux-x86_64.sh \
-    && ./conda_installer.sh ./Miniconda-latest-Linux-x86_64.sh /condadir \
+    && ./Miniconda-latest-Linux-x86_64.sh -b -p /condadir \
 	&& rm Miniconda-latest-Linux-x86_64.sh 
 
 # we are supposed to use *this* Python
