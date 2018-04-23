@@ -22,11 +22,12 @@ RUN pacman -S expac yajl --noconfirm
 
 # crear user c/ sudo
 #+++++++++++++++++++++++++++++++++++++++++
+ARG UID_HOST
 ENV HomeDocker /home/docker
 # Add docker user (user:pass is docker:docker):
 # NOTE: the 'wheel' group has to be added by hand into the sudoers file
 RUN DOCKER_ENCRYPTED_PASSWORD=`perl -e 'print crypt(docker, "docker"),"\n"'` \
-    && useradd -m --uid 1000 -G wheel -d ${HomeDocker} -p "$DOCKER_ENCRYPTED_PASSWORD" -s /bin/bash docker \
+    && useradd -m --uid ${UID_HOST} -G wheel -d ${HomeDocker} -p "$DOCKER_ENCRYPTED_PASSWORD" -s /bin/bash docker \
     && echo " %wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # de ahora en adelante, ejecutamos como user=docker
@@ -51,6 +52,8 @@ RUN pacaur -S yaourt --noconfirm
 
 #+++++++++++++++++++++++++++++++++++++++++
 #--- install Audacity
-RUN pacaur -S --noconfirm community/audacity
+RUN pacaur -S --noconfirm \
+    community/audacity \
+    aur/audacity-extras
 
 #EOF
