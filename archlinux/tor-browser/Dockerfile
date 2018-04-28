@@ -1,6 +1,7 @@
-FROM base/archlinux:2018.01.01
-LABEL maintainer "j"
+FROM base/archlinux:latest
+LABEL maintainer "jimsrc <jimmy.ilws@gmail.com>"
 
+ARG VERSION_DATE
 RUN pacman -Syu --noconfirm \
     && pacman -S --noconfirm binutils make gcc curl mpfr pkg-config fakeroot sudo git vi vim
 
@@ -10,11 +11,12 @@ RUN pacman -S expac yajl --noconfirm
 
 # crear user c/ sudo
 #+++++++++++++++++++++++++++++++++++++++++
+ARG UID_HOST
 ENV HomeDocker /home/docker
 # Add docker user (user:pass is docker:docker):
 # NOTE: the 'wheel' group has to be added by hand into the sudoers file
 RUN DOCKER_ENCRYPTED_PASSWORD=`perl -e 'print crypt(docker, "docker"),"\n"'` \
-    && useradd -m --uid 1000 -G wheel -d ${HomeDocker} -p "$DOCKER_ENCRYPTED_PASSWORD" -s /bin/bash docker \
+    && useradd -m --uid ${UID_HOST} -G wheel -d ${HomeDocker} -p "$DOCKER_ENCRYPTED_PASSWORD" -s /bin/bash docker \
     && echo " %wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # de ahora en adelante, ejecutamos como user=docker
@@ -22,10 +24,11 @@ USER docker
 
 #--- instalar cower & pacaur
 # NOTE: necesitamos el "pod2man" (https://github.com/LemonBoy/bar/issues/89) en el PATH
+# NOTE: i can use the GNUPGHOME variable instead of exxecuting `gpg --recv-key`
 RUN export PATH="/usr/bin/core_perl:$PATH" \
+    && export GNUPGHOME="/etc/pacman.d/gnupg" \
     && mkdir ~/tmp \
     && cd ~/tmp \
-    && gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53 \
     && curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower \
     && makepkg -i PKGBUILD --noconfirm \
     && makepkg -s -i --noextract \
@@ -51,7 +54,6 @@ RUN gpg --recv-keys --keyserver hkp://pgp.mit.edu D1483FA6C3C07136 \
 # the system (openssl, tor-browser, etc), by executing the 'pacman -Syu'. 
 # The kernel version of course should be updated in the host.
 
-ARG VERSION_DATE
-RUN pacaur -Syu --noconfirm
+#RUN pacaur -Syu --noconfirm
 
 #EOF
